@@ -11,6 +11,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SignUpViewController" customModule="Bankodemia" customModuleProvider="target">
             <connections>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="emailTextField" destination="nKW-f8-xOx" id="out-eml-tf"/>
+                <outlet property="passwordTextField" destination="PNN-JL-TdT" id="out-pwd-tf"/>
+                <outlet property="signUpButton" destination="Y1T-s5-eLW" id="out-signup-btn"/>
+                <outlet property="emailErrorLabel" destination="eml-Er-000" id="out-eml-err"/>
+                <outlet property="passwordErrorLabel" destination="pwd-Er-000" id="out-pwd-err"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -82,12 +87,18 @@
                                         <color key="baseForegroundColor" systemColor="systemBackgroundColor"/>
                                         <color key="baseBackgroundColor" systemColor="systemBlueColor"/>
                                     </buttonConfiguration>
+                                    <connections>
+                                        <action selector="requestSignUp:" destination="-1" eventType="touchUpInside" id="act-signup"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T1t-M5-2wx">
                                     <rect key="frame" x="131.66666666666666" y="590" width="129.99999999999997" height="40"/>
                                     <buttonConfiguration key="configuration" style="plain" title="Regresar">
                                         <color key="baseForegroundColor" systemColor="systemBlueColor"/>
                                     </buttonConfiguration>
+                                    <connections>
+                                        <action selector="goBack:" destination="-1" eventType="touchUpInside" id="act-back"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
