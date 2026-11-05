@@ -45,7 +45,8 @@ final class AppDIContainer: ViewControllerFactory {
     
     func makeLoginViewController(onLoginSuccess: @escaping () -> Void) -> UIViewController {
         let presenter = LoginPresenter(onLoginSuccess: onLoginSuccess,
-                                       validator: LoginValidator())
+                                       validator: LoginValidator(),
+                                       authRepository: FirebaseAuthRepository())
         let viewController = LoginViewController(presenter: presenter)
         presenter.view = viewController
         return viewController
