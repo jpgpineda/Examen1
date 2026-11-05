@@ -55,6 +55,11 @@ extension LoginViewController: LoginView {
         emailErrorLabel.isHidden = message == nil
     }
     
+    func showPasswordError(message: String?) {
+        passwordErrorLabel.text = message
+        passwordErrorLabel.isHidden = message == nil
+    }
+    
     func setLoginButtonEnabled(_ isEnabled: Bool) {
         loginButton.isEnabled = isEnabled
     }
