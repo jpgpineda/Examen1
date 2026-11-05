@@ -9,7 +9,7 @@ import UIKit
 import Lottie
 
 class LoaderViewController: UIViewController {
-
+    
     @IBOutlet weak var animationContainer: UIView!
     private var animationView: LottieAnimationView?
     
@@ -19,7 +19,7 @@ class LoaderViewController: UIViewController {
     }
     
     private func setupView() {
-        let animation = LottieAnimationView(name: "loader")
+        let animation = LottieAnimationView(name: "loader_2")
         animation.loopMode = .loop
         animation.contentMode = .scaleAspectFit
         animation.translatesAutoresizingMaskIntoConstraints = false
@@ -32,9 +32,20 @@ class LoaderViewController: UIViewController {
             animation.trailingAnchor.constraint(equalTo: animationContainer.trailingAnchor)
         ])
         animationView = animation
-        animationView?.play()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(animated)
+        animationView?.play()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super .viewWillDisappear(animated)
+        animationView?.stop()
+    }
+    
+    
+    
     deinit {
         animationView?.stop()
     }
