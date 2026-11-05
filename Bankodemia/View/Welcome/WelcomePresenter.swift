@@ -14,7 +14,7 @@ final class WelcomePresenter {
         self.onShowLogin = onShowLogin
     }
     
-    func showLogintrmps() {
+    func showLogin() {
         self.onShowLogin()
     }
 }

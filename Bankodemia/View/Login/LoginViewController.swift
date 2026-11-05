@@ -27,44 +27,43 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViewtrmps()
+        setupView()
     }
     
-    func setupViewtrmps() {
+    func setupView() {
         emailTextField.delegate = self
         passwordTextField.delegate = self
         
-        emailTextField.addTarget(self, action: #selector(textDidChangetrmps), for: .editingChanged)
-        passwordTextField.addTarget(self, action: #selector(textDidChangetrmps), for: .editingChanged)
-        
+        emailTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
     }
     
-    @objc private func textDidChangetrmps() {
-        presenter.fieldsDidChangetrmps(email: emailTextField.text ?? "",
+    @objc private func textDidChange() {
+        presenter.fieldsDidChange(email: emailTextField.text ?? "",
                                   password: passwordTextField.text ?? "")
     }
 
-    @IBAction func requestLogintrmps(_ sender: UIButton) {
-        presenter.requestLogintrmps(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+    @IBAction func requestLogin(_ sender: UIButton) {
+        presenter.requestLogin(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
     }
 }
 
 extension LoginViewController: LoginView {
-    func showEmailErrortrmps(message: String?) {
+    func showEmailError(message: String?) {
         emailErrorLabel.text = message
         emailErrorLabel.isHidden = message == nil
     }
     
-    func showPasswordErrortrmps(message: String?) {
+    func showPasswordError(message: String?) {
         passwordErrorLabel.text = message
         passwordErrorLabel.isHidden = message == nil
     }
     
-    func setLoginButtonEnabledtrmps(_ isEnabled: Bool) {
+    func setLoginButtonEnabled(_ isEnabled: Bool) {
         loginButton.isEnabled = isEnabled
     }
     
-    func manageLoadertrmps(_ isLoading: Bool) {
+    func manageLoader(_ isLoading: Bool) {
         isLoading ? showLoader() : hideLoader()
     }
 }
@@ -72,9 +71,9 @@ extension LoginViewController: LoginView {
 extension LoginViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == emailTextField {
-            presenter.emailDidEndEditingtrmps(textField.text ?? "")
+            presenter.emailDidEndEditing(textField.text ?? "")
         } else if textField == passwordTextField {
-            presenter.passwordDidEndEditingtrmps(textField.text ?? "")
+            presenter.passwordDidEndEditing(textField.text ?? "")
         }
     }
 }

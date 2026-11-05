@@ -17,15 +17,15 @@ final class AppCoordinator {
         self.factory = factory
     }
     
-    func starttrmps() {
-        let viewController = factory.makeWelcomeViewControllertrmps { [weak self] in
-            self?.showLogintrmps()
+    func start() {
+        let viewController = factory.makeWelcomeViewController { [weak self] in
+            self?.showLogin()
         }
         navigationController.viewControllers = [viewController]
     }
     
-    private func showLogintrmps() {
-        let viewController = factory.makeLoginViewControllertrmps { [weak self] in
+    private func showLogin() {
+        let viewController = factory.makeLoginViewController { [weak self] in
             
         }
         navigationController.pushViewController(viewController, animated: true)
@@ -33,17 +33,17 @@ final class AppCoordinator {
 }
 
 protocol ViewControllerFactory {
-    func makeWelcomeViewControllertrmps(onShowLogin: @escaping () -> Void) -> UIViewController
-    func makeLoginViewControllertrmps(onLoginSuccess: @escaping () -> Void) -> UIViewController
+    func makeWelcomeViewController(onShowLogin: @escaping () -> Void) -> UIViewController
+    func makeLoginViewController(onLoginSuccess: @escaping () -> Void) -> UIViewController
 }
 
 final class AppDIContainer: ViewControllerFactory {
-    func makeWelcomeViewControllertrmps(onShowLogin: @escaping () -> Void) -> UIViewController {
+    func makeWelcomeViewController(onShowLogin: @escaping () -> Void) -> UIViewController {
         let presenter = WelcomePresenter(onShowLogin: onShowLogin)
         return WelcomeViewController(presenter: presenter)
     }
     
-    func makeLoginViewControllertrmps(onLoginSuccess: @escaping () -> Void) -> UIViewController {
+    func makeLoginViewController(onLoginSuccess: @escaping () -> Void) -> UIViewController {
         let presenter = LoginPresenter(onLoginSuccess: onLoginSuccess,
                                        validator: LoginValidator(),
                                        authRepository: FirebaseAuthRepository())
