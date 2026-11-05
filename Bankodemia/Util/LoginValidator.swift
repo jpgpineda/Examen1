@@ -25,14 +25,14 @@ enum ValidationError: Equatable {
 }
 
 protocol LoginValidatorProtocol {
-    func validateEmail(_ email: String) -> ValidationError?
-    func validatePassword(_ password: String) -> ValidationError?
+    func validateEmailtrmps(_ email: String) -> ValidationError?
+    func validatePasswordtrmps(_ password: String) -> ValidationError?
 }
 
 struct LoginValidator: LoginValidatorProtocol {
     private let minPasswordLength: Int = 8
     
-    func validateEmail(_ email: String) -> ValidationError? {
+    func validateEmailtrmps(_ email: String) -> ValidationError? {
         let trimmed = email.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return .empty }
         
@@ -41,7 +41,7 @@ struct LoginValidator: LoginValidatorProtocol {
         return isValid ? nil : .invalidFormat
     }
     
-    func validatePassword(_ password: String) -> ValidationError? {
+    func validatePasswordtrmps(_ password: String) -> ValidationError? {
         return nil
     }
 }

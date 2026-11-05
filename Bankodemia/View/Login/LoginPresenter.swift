@@ -8,10 +8,10 @@
 import Foundation
 
 protocol LoginView: AnyObject {
-    func showEmailError(message: String?)
-    func showPasswordError(message: String?)
-    func setLoginButtonEnabled(_ isEnabled: Bool)
-    func manageLoader(_ isLoading: Bool)
+    func showEmailErrortrmps(message: String?)
+    func showPasswordErrortrmps(message: String?)
+    func setLoginButtonEnabledtrmps(_ isEnabled: Bool)
+    func manageLoadertrmps(_ isLoading: Bool)
 }
 
 final class LoginPresenter {
@@ -28,30 +28,30 @@ final class LoginPresenter {
         self.authRepository = authRepository
     }
     
-    func emailDidEndEditing(_ email: String) {
-        view?.showEmailError(message: validator.validateEmail(email)?.message)
+    func emailDidEndEditingtrmps(_ email: String) {
+        view?.showEmailErrortrmps(message: validator.validateEmailtrmps(email)?.message)
     }
     
-    func passwordDidEndEditing(_ password: String) {
-        view?.showPasswordError(message: validator.validatePassword(password)?.message)
+    func passwordDidEndEditingtrmps(_ password: String) {
+        view?.showPasswordErrortrmps(message: validator.validatePasswordtrmps(password)?.message)
     }
     
-    func fieldsDidChange(email: String, password: String) {
-        let isFormValid = validator.validateEmail(email) == nil && validator.validatePassword(password) == nil
-        view?.setLoginButtonEnabled(isFormValid)
+    func fieldsDidChangetrmps(email: String, password: String) {
+        let isFormValid = validator.validateEmailtrmps(email) == nil && validator.validatePasswordtrmps(password) == nil
+        view?.setLoginButtonEnabledtrmps(isFormValid)
     }
     
-    func requestLogin(email: String, password: String) {
-        view?.manageLoader(true)
+    func requestLogintrmps(email: String, password: String) {
+        view?.manageLoadertrmps(true)
         Task { @MainActor [weak self] in
             guard let self = self else { return }
             do {
                 let user = try await self.authRepository.signUp(email: email, password: password)
-                self.view?.manageLoader(false)
+                self.view?.manageLoadertrmps(false)
                 self.onLoginSuccess()
             } catch {
-                self.view?.manageLoader(false)
-                self.view?.showEmailError(message: error.localizedDescription)
+                self.view?.manageLoadertrmps(false)
+                self.view?.showEmailErrortrmps(message: error.localizedDescription)
             }
         }
     }
