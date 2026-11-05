@@ -8,8 +8,10 @@
 import UIKit
 
 extension UIViewController {
+    // El loader se agrega al navigationController (si existe), así que hay que buscarlo ahí
     private var loaderChild: LoaderViewController? {
-        children.first { $0 is LoaderViewController } as? LoaderViewController
+        let host: UIViewController = navigationController ?? self
+        return host.children.first { $0 is LoaderViewController } as? LoaderViewController
     }
     
     func showLoader() {
@@ -19,7 +21,7 @@ extension UIViewController {
         let loader = LoaderViewController(nibName: "LoaderViewController", bundle: nil)
         
         host.addChild(loader)
-        loader.view.frame = view.bounds
+        loader.view.frame = host.view.bounds
         loader.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         loader.view.alpha = 0
         host.view.addSubview(loader.view)
