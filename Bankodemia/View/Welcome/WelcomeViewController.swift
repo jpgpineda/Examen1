@@ -30,6 +30,10 @@ class WelcomeViewController: UIViewController {
         presenter.showLogin()
     }
     
+    @IBAction func showSignUp(_ sender: UIButton) {
+        presenter.showSignUp()
+    }
+    
 
 
     /*
