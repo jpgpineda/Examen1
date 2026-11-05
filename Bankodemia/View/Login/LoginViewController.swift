@@ -62,6 +62,12 @@ extension LoginViewController: LoginView {
     func manageLoader(_ isLoading: Bool) {
         isLoading ? showLoader() : hideLoader()
     }
+    
+    func showPasswordError(message: String?){
+        passwordErrorLabel.text = message
+        passwordErrorLabel.isHidden = message == nil
+    }
+    
 }
 
 extension LoginViewController: UITextFieldDelegate {
