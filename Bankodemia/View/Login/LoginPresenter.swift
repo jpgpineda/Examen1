@@ -42,11 +42,19 @@ final class LoginPresenter {
     }
     
     func requestLogin(email: String, password: String) {
+        let emailError = validator.validateEmail(email)?.message
+        let passwordError = validator.validatePassword(password)?.message
+        
+        view?.showEmailError(message: emailError)
+        view?.showPasswordError(message: passwordError)
+        
+        guard emailError == nil, passwordError == nil else { return }
+        
         view?.manageLoader(true)
         Task { @MainActor [weak self] in
             guard let self = self else { return }
             do {
-                let user = try await self.authRepository.signUp(email: email, password: password)
+                let user = try await self.authRepository.signIn(email: email, password: password)
                 self.view?.manageLoader(false)
                 self.onLoginSuccess()
             } catch {

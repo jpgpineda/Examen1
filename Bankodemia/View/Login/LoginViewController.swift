@@ -55,7 +55,7 @@ extension LoginViewController: LoginView {
         emailErrorLabel.isHidden = message == nil
     }
     
-    func showPasswordError(message: String?){
+    func showPasswordError(message: String?) {
         passwordErrorLabel.text = message
         passwordErrorLabel.isHidden = message == nil
     }
@@ -73,6 +73,8 @@ extension LoginViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == emailTextField {
             presenter.emailDidEndEditing(textField.text ?? "")
-        } 
+        } else if textField == passwordTextField {
+            presenter.passwordDidEndEditing(textField.text ?? "")
+        }
     }
 }
