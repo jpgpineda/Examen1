@@ -9,98 +9,84 @@
 import UIKit
 
 class SignUpViewController: UIViewController {
-
-    // MARK: - IBOutlets
-    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var registerButton: UIButton!
-    @IBOutlet weak var returnButton: UIButton!
-    @IBOutlet weak var backTopButton: UIButton!
-    
-    
     @IBOutlet weak var emailErrorLabel: UILabel!
     @IBOutlet weak var passwordErrorLabel: UILabel!
+    @IBOutlet weak var signUpButton: UIButton!
     
-    var presenter: SignUpPresenterProtocol?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
+    private let presenter: SignUpPresenter
+    
+    init(presenter: SignUpPresenter) {
+        self.presenter = presenter
+        super.init(nibName: "SignUpViewController", bundle: nil)
     }
     
-    private func setupUI() {
-        
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+    }
+    
+    func setupView() {
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
         passwordTextField.isSecureTextEntry = true
         
+        emailTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        
+        signUpButton.isEnabled = false
         
         emailErrorLabel.isHidden = true
         passwordErrorLabel.isHidden = true
-        
-        
-        updateRegisterButton(isEnabled: false)
-        registerButton.layer.cornerRadius = 6
-        
-        
-        emailTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        passwordTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
-    @objc private func textFieldDidChange() {
-        
-        presenter?.validateForm(email: emailTextField.text, password: passwordTextField.text)
-    }
-
-    
-    @IBAction func registerButtonTapped(_ sender: UIButton) {
-        presenter?.registerTapped(email: emailTextField.text, password: passwordTextField.text)
+    @objc private func textDidChange() {
+        presenter.fieldsDidChange(email: emailTextField.text ?? "",
+                                      password: passwordTextField.text ?? "")
     }
     
-    @IBAction func backButtonTapped(_ sender: UIButton) {
-        presenter?.backTapped()
+    @IBAction func requestSignUp(_ sender: UIButton) {
+        presenter.requestSignUp(email: emailTextField.text ?? "",
+                                     password: passwordTextField.text ?? "")
+    }
+    
+    @IBAction func returnToWelcome(_ sender: UIButton) {
+        presenter.returnToWelcome()
     }
 }
 
-extension SignUpViewController: SignUpViewProtocol {
-    
-    func updateRegisterButton(isEnabled: Bool) {
-        registerButton.isEnabled = isEnabled
-        registerButton.backgroundColor = isEnabled ? .systemBlue : .systemGray4
+extension SignUpViewController: SignUpView {
+    func showEmailError(message: String?) {
+        emailErrorLabel.text = message
+        emailErrorLabel.isHidden = message == nil
     }
     
-    func showEmailError(_ message: String?) {
-        if let error = message {
-            emailErrorLabel.text = error
-            emailErrorLabel.isHidden = false
-            emailTextField.layer.borderColor = UIColor.systemRed.cgColor
-            emailTextField.layer.borderWidth = 1
-        } else {
-            emailErrorLabel.isHidden = true
-            emailTextField.layer.borderWidth = 0
-        }
+    func showPasswordError(message: String?) {
+        passwordErrorLabel.text = message
+        passwordErrorLabel.isHidden = message == nil
     }
     
-    func showPasswordError(_ message: String?) {
-        if let error = message {
-            passwordErrorLabel.text = error
-            passwordErrorLabel.isHidden = false
-            passwordTextField.layer.borderColor = UIColor.systemRed.cgColor
-            passwordTextField.layer.borderWidth = 1
-        } else {
-            passwordErrorLabel.isHidden = true
-            passwordTextField.layer.borderWidth = 0
-        }
+    func setSignUpButtonEnabled(_ isEnabled: Bool) {
+        signUpButton.isEnabled = isEnabled
     }
     
-    func showLoading(_ isVisible: Bool) {
-        
-        view.isUserInteractionEnabled = !isVisible
-        registerButton.setTitle(isVisible ? "Cargando..." : "Registrarse", for: .normal)
-    }
-    
-    func showErrorAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Aceptar", style: .default))
-        present(alert, animated: true)
+    func manageLoader(_ isLoading: Bool) {
+        isLoading ? showLoader() : hideLoader()
     }
 }
+
+extension SignUpViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == emailTextField {
+            presenter.emailDidEndEditing(textField.text ?? "")
+        } else if textField == passwordTextField {
+            presenter.passwordDidEndEditing(textField.text ?? "")
+        }
+    }
+}
+

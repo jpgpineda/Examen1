@@ -5,55 +5,73 @@
 //  Created by Macbook Air 5 on 05/11/26.
 //
 
+
 import Foundation
 
-
-
-protocol SignUpViewProtocol: AnyObject {
-    func updateRegisterButton(isEnabled: Bool)
-    func showEmailError(_ message: String?)
-    func showPasswordError(_ message: String?)
-    func showLoading(_ isVisible: Bool)
-    func showErrorAlert(message: String)
+protocol SignUpView: AnyObject {
+    func showEmailError(message: String?)
+    func showPasswordError(message: String?)
+    func setSignUpButtonEnabled(_ isEnabled: Bool)
+    func manageLoader(_ isLoading: Bool)
 }
 
-protocol SignUpPresenterProtocol {
-    func validateForm(email: String?, password: String?)
-    func registerTapped(email: String?, password: String?)
-    func backTapped()
-}
-
-protocol SignUpCoordinatorDelegate: AnyObject {
-    func didTapBackToWelcome()
-    func didRegisterSuccessfully()
-}
-
-
-class SignUpPresenter: SignUpPresenterProtocol {
-    private weak var view: SignUpViewProtocol?
-    // private let validator: LoginValidatorProtocol
-    // private let authRepository: AuthRepositoryProtocol
-    private weak var coordinator: SignUpCoordinatorDelegate?
+final class SignUpPresenter {
+    weak var view: SignUpView?
+    private let onSignUpSuccess: () -> Void
+    private let onReturn: () -> Void
+    private let validator: LoginValidatorProtocol
+    private let authRepository: AuthRepositoryProtocol
     
-    init(view: SignUpViewProtocol,
-         /* validator: LoginValidatorProtocol, */
-         /* authRepository: AuthRepositoryProtocol, */
-         coordinator: SignUpCoordinatorDelegate) {
-        self.view = view
-        // self.validator = validator
-        // self.authRepository = authRepository
-        self.coordinator = coordinator
+    init(onSignUpSuccess: @escaping () -> Void,
+         onReturn: @escaping () -> Void,
+         validator: LoginValidatorProtocol,
+         authRepository: AuthRepositoryProtocol) {
+        self.onSignUpSuccess = onSignUpSuccess
+        self.onReturn = onReturn
+        self.validator = validator
+        self.authRepository = authRepository
     }
     
-    func validateForm(email: String?, password: String?) {
+    func emailDidEndEditing(_ email: String) {
+        view?.showEmailError(message: validator.validateEmail(email)?.message)
+    }
+    
+    func passwordDidEndEditing(_ password: String) {
+        view?.showPasswordError(message: validator.validatePassword(password)?.message)
+    }
+    
+    func fieldsDidChange(email: String, password: String) {
+        let emailError = validator.validateEmail(email)
+        let passwordError = validator.validatePassword(password)
         
+        if emailError == nil {
+            view?.showEmailError(message: nil)
+        }
+        if passwordError == nil {
+            view?.showPasswordError(message: nil)
+        }
+        
+        let isFormValid = emailError == nil && passwordError == nil
+        view?.setSignUpButtonEnabled(isFormValid)
     }
     
-    func registerTapped(email: String?, password: String?) {
-    
+    func requestSignUp(email: String, password: String) {
+        view?.manageLoader(true)
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            do {
+                _ = try await self.authRepository.signUp(email: email, password: password)
+                self.view?.manageLoader(false)
+                self.onSignUpSuccess()
+            } catch {
+                self.view?.manageLoader(false)
+                self.view?.showEmailError(message: error.localizedDescription)
+            }
+        }
     }
     
-    func backTapped() {
-        coordinator?.didTapBackToWelcome()
+    func returnToWelcome() {
+        onReturn()
     }
 }
+
