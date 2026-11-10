@@ -61,6 +61,7 @@ class SignUpViewController: UIViewController {
 }
 
 extension SignUpViewController: SignUpView {
+    
     func showEmailError(message: String?) {
         emailErrorLabel.text = message
         emailErrorLabel.isHidden = message == nil

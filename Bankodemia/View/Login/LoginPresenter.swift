@@ -46,7 +46,7 @@ final class LoginPresenter {
         Task { @MainActor [weak self] in
             guard let self = self else { return }
             do {
-                let user = try await self.authRepository.signUp(email: email, password: password)
+                _ = try await self.authRepository.signIn(email: email, password: password)
                 self.view?.manageLoader(false)
                 self.onLoginSuccess()
             } catch {
