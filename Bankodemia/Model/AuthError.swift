@@ -11,18 +11,21 @@ enum AuthError: LocalizedError {
     case invalidCredentials
     case emailAlreadyInUse
     case network
+    case weakPassword
     case unknown
     
     var errorDescription: String? {
         switch self {
         case .invalidCredentials:
-            return "Invalid credentials"
+            return "Credenciales incorrectas"
         case .network:
-            return "Network error"
+            return "Error de conexión"
         case .unknown:
-            return "Unknown error"
+            return "Ocurrió un error inesperado"
         case .emailAlreadyInUse:
-            return "Email already in use"
+            return "El correo ya está en uso"
+        case .weakPassword:
+            return "La contraseña debe tener al menos 6 caracteres"
         }
     }
 }

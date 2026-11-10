@@ -19,7 +19,7 @@ class LoaderViewController: UIViewController {
     }
     
     private func setupView() {
-        let animation = LottieAnimationView(name: "loader")
+        let animation = LottieAnimationView(name: "loader_2")
         animation.loopMode = .loop
         animation.contentMode = .scaleAspectFit
         animation.translatesAutoresizingMaskIntoConstraints = false
