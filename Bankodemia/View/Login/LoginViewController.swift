@@ -36,7 +36,6 @@ class LoginViewController: UIViewController {
         
         emailTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         passwordTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
-        
     }
     
     @objc private func textDidChange() {
@@ -55,6 +54,11 @@ extension LoginViewController: LoginView {
         emailErrorLabel.isHidden = message == nil
     }
     
+    func showPasswordError(message: String?) {
+        passwordErrorLabel.text = message
+        passwordErrorLabel.isHidden = message == nil
+    }
+    
     func setLoginButtonEnabled(_ isEnabled: Bool) {
         loginButton.isEnabled = isEnabled
     }
@@ -68,6 +72,8 @@ extension LoginViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == emailTextField {
             presenter.emailDidEndEditing(textField.text ?? "")
-        } 
+        } else if textField == passwordTextField {
+            presenter.passwordDidEndEditing(textField.text ?? "")
+        }
     }
 }
