@@ -56,17 +56,26 @@ final class FirebaseAuthRepository: AuthRepositoryProtocol {
     }
 
     private static func mapError(_ error: Error) -> AuthError {
-        guard let code = AuthErrorCode(_bridgedNSError: error as NSError) else {
+        let nsError = error as NSError
+
+        guard nsError.domain == AuthErrorDomain,
+              let code = AuthErrorCode(rawValue: nsError.code) else {
             return .unknown
         }
 
-        switch code.code {
+        switch code {
         case .wrongPassword, .userNotFound, .invalidCredential:
             return .invalidCredentials
         case .emailAlreadyInUse:
             return .emailAlreadyInUse
         case .networkError:
             return .network
+        case .invalidEmail:
+            return .invalidEmail
+        case .weakPassword:
+            return .weakPassword
+        case .operationNotAllowed:
+            return .operationNotAllowed
         default:
             return .unknown
         }
