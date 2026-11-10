@@ -18,36 +18,50 @@ final class AppCoordinator {
     }
     
     func start() {
-        let viewController = factory.makeWelcomeViewController { [weak self] in
+        let viewController = factory.makeWelcomeViewController(onShowLogin: {[weak self] in
             self?.showLogin()
-        }
+            }, onShowSignUp: {[weak self] in
+                self?.showSignUp()
+            }
+        )
         navigationController.viewControllers = [viewController]
     }
     
     private func showLogin() {
-        let viewController = factory.makeLoginViewController { [weak self] in
-            
+        let viewController = factory.makeLoginViewController (onLoginSuccess: { [weak self] in
         }
+        )
         navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    private func showSignUp(){
+        let viewController = factory.makeSignUpViewController()
+        navigationController.pushViewController(viewController, animated: true)
+        
     }
 }
 
 protocol ViewControllerFactory {
-    func makeWelcomeViewController(onShowLogin: @escaping () -> Void) -> UIViewController
+    func makeWelcomeViewController(onShowLogin: @escaping () -> Void, onShowSignUp: @escaping () -> Void) -> UIViewController
     func makeLoginViewController(onLoginSuccess: @escaping () -> Void) -> UIViewController
+    func makeSignUpViewController() -> UIViewController
 }
 
 final class AppDIContainer: ViewControllerFactory {
-    func makeWelcomeViewController(onShowLogin: @escaping () -> Void) -> UIViewController {
-        let presenter = WelcomePresenter(onShowLogin: onShowLogin)
+    func makeWelcomeViewController(onShowLogin: @escaping () -> Void, onShowSignUp: @escaping () -> Void) -> UIViewController {
+        let presenter = WelcomePresenter(onShowLogin: onShowLogin, onShowSignUp: onShowSignUp)
         return WelcomeViewController(presenter: presenter)
     }
     
     func makeLoginViewController(onLoginSuccess: @escaping () -> Void) -> UIViewController {
         let presenter = LoginPresenter(onLoginSuccess: onLoginSuccess,
-                                       validator: LoginValidator())
+                                       validator: LoginValidator(), authRepository: FirebaseAuthRepository())
         let viewController = LoginViewController(presenter: presenter)
         presenter.view = viewController
         return viewController
+    }
+    
+    func makeSignUpViewController() -> UIViewController {
+        return SignUpViewController(nibName: "SignUpViewController", bundle: nil)
     }
 }
