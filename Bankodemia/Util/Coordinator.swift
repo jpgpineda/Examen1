@@ -86,7 +86,7 @@ final class AppDIContainer: ViewControllerFactory {
     func makeSignUpViewController(onSignUpSuccess: @escaping () -> Void) -> UIViewController {
         let presenter = SignUpPresenter(
             onSignUpSuccess: onSignUpSuccess,
-            validator: SignUpValidator(),
+            validator: LoginValidator(),
             authRepository: FirebaseAuthRepository())
         
         let viewController = SignUpViewController(presenter: presenter)

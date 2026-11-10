@@ -19,7 +19,7 @@ class SignUpViewController: UIViewController {
     
     init(presenter: SignUpPresenter) {
         self.presenter = presenter
-        super.init(nibName: "RegisterViewController", bundle: nil)
+        super.init(nibName: "SignUpViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {
