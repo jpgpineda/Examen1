@@ -8,28 +8,29 @@
 import UIKit
 
 class WelcomeViewController: UIViewController {
-    
     private let presenter: WelcomePresenter
-    
+
     init(presenter: WelcomePresenter) {
         self.presenter = presenter
         super.init(nibName: "WelcomeViewController", bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
-    
+
     @IBAction func showLogin(_ sender: UIButton) {
         presenter.showLogin()
     }
-    
+
+    @IBAction func showSignUp(_ sender: UIButton) {
+        presenter.showSignUp()
+    }
+}
 
 
     /*
@@ -41,5 +42,3 @@ class WelcomeViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
-}

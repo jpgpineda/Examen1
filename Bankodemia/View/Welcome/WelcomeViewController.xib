@@ -25,6 +25,9 @@
                     </constraints>
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain" title="Registrarse"/>
+                    <connections>
+                        <action selector="showSignUp:" destination="-1" eventType="touchUpInside" id="hFL-vy-xH3"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cqz-wx-WZQ">
                     <rect key="frame" x="16" y="672" width="361" height="40"/>
@@ -33,6 +36,9 @@
                     </constraints>
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="filled" title="Iniciar sesion"/>
+                    <connections>
+                        <action selector="showLogin:" destination="-1" eventType="touchUpInside" id="dOC-8Y-sAJ"/>
+                    </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
