@@ -55,7 +55,7 @@ final class SignUpPresenter {
                 self.onSignUpSuccess()
             } catch let authError as AuthError {
                 self.view?.manageLoader(false)
-                self.view?.showFirebaseError(message: Self.messageForAuthError(authError))
+                self.view?.showFirebaseError(message: authError.errorDescription ?? "Error desconocido")
             } catch {
                 self.view?.manageLoader(false)
                 self.view?.showFirebaseError(message: error.localizedDescription)
@@ -65,18 +65,5 @@ final class SignUpPresenter {
 
     func goBack() {
         onBack()
-    }
-
-    private static func messageForAuthError(_ error: AuthError) -> String {
-        switch error {
-        case .emailAlreadyInUse:
-            return "Ese correo ya está registrado. Intenta iniciar sesión."
-        case .invalidCredentials:
-            return "Credenciales inválidas. Revisa tu correo y contraseña."
-        case .network:
-            return "Error de red. Revisa tu conexión a internet."
-        case .unknown:
-            return "Ocurrió un error inesperado. Intenta de nuevo."
-        }
     }
 }
