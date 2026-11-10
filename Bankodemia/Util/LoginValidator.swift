@@ -30,7 +30,7 @@ protocol LoginValidatorProtocol {
 }
 
 struct LoginValidator: LoginValidatorProtocol {
-    private let minPasswordLength: Int = 8
+    private let minPasswordLength: Int = 6
     
     func validateEmail(_ email: String) -> ValidationError? {
         let trimmed = email.trimmingCharacters(in: .whitespaces)
@@ -42,6 +42,7 @@ struct LoginValidator: LoginValidatorProtocol {
     }
     
     func validatePassword(_ password: String) -> ValidationError? {
-        return nil
+        guard !password.isEmpty else { return .empty }
+        return password.count < minPasswordLength ? .tooShort(min: minPasswordLength) : nil
     }
 }
