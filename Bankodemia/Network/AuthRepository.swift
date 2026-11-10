@@ -50,26 +50,32 @@ final class FirebaseAuthRepository: AuthRepositoryProtocol {
 
     // MARK: - Mapeos Firebase → dominio
 
-    // `FirebaseAuth.User` es el de Firebase; `User` es el tuyo.
     private static func mapUser(_ fbUser: FirebaseAuth.User) -> User {
         let email = fbUser.email ?? ""
-        let fallbackName = email.components(separatedBy: "@").first ?? ""
-        return User(id: fbUser.uid,
-                    email: email)
+        return User(id: fbUser.uid, email: email)
     }
 
     private static func mapError(_ error: Error) -> AuthError {
-        guard let code = AuthErrorCode(_bridgedNSError: error as NSError) else {
+        let nsError = error as NSError
+
+        guard nsError.domain == AuthErrorDomain,
+              let code = AuthErrorCode(rawValue: nsError.code) else {
             return .unknown
         }
 
-        switch code.code {
+        switch code {
         case .wrongPassword, .userNotFound, .invalidCredential:
             return .invalidCredentials
         case .emailAlreadyInUse:
             return .emailAlreadyInUse
         case .networkError:
             return .network
+        case .invalidEmail:
+            return .invalidEmail
+        case .weakPassword:
+            return .weakPassword
+        case .operationNotAllowed:
+            return .operationNotAllowed
         default:
             return .unknown
         }
