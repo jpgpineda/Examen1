@@ -2,15 +2,16 @@
 //  SignUpPresenter.swift
 //  Bankodemia
 //
-//  Created by MacBook 6 on 05/11/26.
+//  Created by Macbook Air 5 on 05/11/26.
 //
+
 
 import Foundation
 
 protocol SignUpView: AnyObject {
     func showEmailError(message: String?)
     func showPasswordError(message: String?)
-    func setRegisterButtonEnabled(_ isEnabled: Bool)
+    func setSignUpButtonEnabled(_ isEnabled: Bool)
     func manageLoader(_ isLoading: Bool)
 }
 
@@ -31,19 +32,33 @@ final class SignUpPresenter {
         self.authRepository = authRepository
     }
     
+    func emailDidEndEditing(_ email: String) {
+        view?.showEmailError(message: validator.validateEmail(email)?.message)
+    }
+    
+    func passwordDidEndEditing(_ password: String) {
+        view?.showPasswordError(message: validator.validatePassword(password)?.message)
+    }
+    
     func fieldsDidChange(email: String, password: String) {
-        let isValid = validator.validateEmail(email) == nil &&
-                      validator.validatePassword(password) == nil
+        let emailError = validator.validateEmail(email)
+        let passwordError = validator.validatePassword(password)
         
-        view?.setRegisterButtonEnabled(isValid)
+        if emailError == nil {
+            view?.showEmailError(message: nil)
+        }
+        if passwordError == nil {
+            view?.showPasswordError(message: nil)
+        }
+        
+        let isFormValid = emailError == nil && passwordError == nil
+        view?.setSignUpButtonEnabled(isFormValid)
     }
     
     func requestSignUp(email: String, password: String) {
         view?.manageLoader(true)
-        
         Task { @MainActor [weak self] in
             guard let self = self else { return }
-            
             do {
                 _ = try await self.authRepository.signUp(email: email, password: password)
                 self.view?.manageLoader(false)
@@ -53,6 +68,10 @@ final class SignUpPresenter {
                 self.view?.showEmailError(message: error.localizedDescription)
             }
         }
+    }
+    
+    func returnToWelcome() {
+        onReturn()
     }
 }
 

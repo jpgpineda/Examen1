@@ -4,16 +4,16 @@
 //
 //  Created by javier pineda on 24/09/26.
 //
+// Comentario para primer commit abigail
 
 import UIKit
 
 class SignUpViewController: UIViewController {
-    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var emailErrorLabel: UILabel!
     @IBOutlet weak var passwordErrorLabel: UILabel!
+    @IBOutlet weak var signUpButton: UIButton!
     
     private let presenter: SignUpPresenter
     
@@ -31,35 +31,32 @@ class SignUpViewController: UIViewController {
         setupView()
     }
     
-    private func setupView() {
+    func setupView() {
         emailTextField.delegate = self
         passwordTextField.delegate = self
+        passwordTextField.isSecureTextEntry = true
         
-        emailTextField.addTarget(
-            self,
-            action: #selector(textDidChange),
-            for: .editingChanged
-        )
+        emailTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         
-        passwordTextField.addTarget(
-            self,
-            action: #selector(textDidChange),
-            for: .editingChanged
-        )
+        signUpButton.isEnabled = false
+        
+        emailErrorLabel.isHidden = true
+        passwordErrorLabel.isHidden = true
     }
     
     @objc private func textDidChange() {
-        presenter.fieldsDidChange(
-            email: emailTextField.text ?? "",
-            password: passwordTextField.text ?? ""
-        )
+        presenter.fieldsDidChange(email: emailTextField.text ?? "",
+                                      password: passwordTextField.text ?? "")
     }
     
-    @IBAction func requesSignUp(_ sender: UIButton) {
-        presenter.requestSignUp(
-            email: emailTextField.text ?? "",
-            password: passwordTextField.text ?? ""
-        )
+    @IBAction func requestSignUp(_ sender: UIButton) {
+        presenter.requestSignUp(email: emailTextField.text ?? "",
+                                     password: passwordTextField.text ?? "")
+    }
+    
+    @IBAction func returnToWelcome(_ sender: UIButton) {
+        presenter.returnToWelcome()
     }
 }
 
@@ -75,8 +72,8 @@ extension SignUpViewController: SignUpView {
         passwordErrorLabel.isHidden = message == nil
     }
     
-    func setRegisterButtonEnabled(_ isEnabled: Bool) {
-        registerButton.isEnabled = isEnabled
+    func setSignUpButtonEnabled(_ isEnabled: Bool) {
+        signUpButton.isEnabled = isEnabled
     }
     
     func manageLoader(_ isLoading: Bool) {
@@ -85,13 +82,12 @@ extension SignUpViewController: SignUpView {
 }
 
 extension SignUpViewController: UITextFieldDelegate {
-    
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == emailTextField {
-            emailErrorLabel.text = "Revisa el formato del correo"
-            emailErrorLabel.isHidden = false
+            presenter.emailDidEndEditing(textField.text ?? "")
+        } else if textField == passwordTextField {
+            presenter.passwordDidEndEditing(textField.text ?? "")
         }
     }
 }
-
 
