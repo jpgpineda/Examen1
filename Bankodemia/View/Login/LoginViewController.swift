@@ -68,10 +68,6 @@ extension LoginViewController: LoginView{
         isLoading ? showLoader() : hideLoader()
     }
     
-    func showPasswordError(message: String?){
-        passwordErrorLabel.text = message
-        passwordErrorLabel.isHidden = message == nil
-    }
     
 }
 
