@@ -42,6 +42,7 @@ struct LoginValidator: LoginValidatorProtocol {
     }
     
     func validatePassword(_ password: String) -> ValidationError? {
-        return nil
+        guard !password.isEmpty else { return .empty }
+        return password.count < minPasswordLength ? .tooShort(min: minPasswordLength) : nil
     }
 }
