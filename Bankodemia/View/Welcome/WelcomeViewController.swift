@@ -9,6 +9,8 @@ import UIKit
 
 class WelcomeViewController: UIViewController {
     
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var registerButton: UIButton!
     private let presenter: WelcomePresenter
     
     init(presenter: WelcomePresenter) {
@@ -28,6 +30,11 @@ class WelcomeViewController: UIViewController {
     
     @IBAction func showLogin(_ sender: UIButton) {
         presenter.showLogin()
+    }
+    
+    
+    @IBAction func showSignUp(_ sender: UIButton) {
+        presenter.showSignUp()
     }
     
 
