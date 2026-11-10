@@ -20,14 +20,17 @@ final class SignUpPresenter {
     weak var view: SignUpView?
     
     private let onSignUpSuccess: () -> Void
+    private let onReturn: () -> Void
     private let validator: LoginValidatorProtocol
     private let authRepository: AuthRepositoryProtocol
     
     init(onSignUpSuccess: @escaping () -> Void,
+         onReturn: @escaping () -> Void,
          validator: LoginValidatorProtocol,
          authRepository: AuthRepositoryProtocol) {
         
         self.onSignUpSuccess = onSignUpSuccess
+        self.onReturn = onReturn
         self.validator = validator
         self.authRepository = authRepository
     }

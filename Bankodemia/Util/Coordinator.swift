@@ -34,10 +34,15 @@ final class AppCoordinator {
     }
     
     private func showSignUp() {
-        let SignUpViewController = factory.makeSignUpViewController { [weak self] in
-            self?.showHome()
-        }
-        navigationController.pushViewController(SignUpViewController, animated: true)
+        let signUpViewController = factory.makeSignUpViewController(
+            onSignUpSuccess: { [weak self] in
+                self?.showHome()
+            },
+            onReturn: { [weak self] in
+                self?.navigationController.popViewController(animated: true)
+            }
+        )
+        navigationController.pushViewController(signUpViewController, animated: true)
     }
     
     private func showHome(){
@@ -54,7 +59,8 @@ protocol ViewControllerFactory {
         onLoginSuccess: @escaping () -> Void) -> UIViewController
     
     func makeSignUpViewController(
-        onSignUpSuccess: @escaping () -> Void) -> UIViewController
+        onSignUpSuccess: @escaping () -> Void,
+        onReturn: @escaping () -> Void) -> UIViewController
     
 }
 
@@ -83,9 +89,12 @@ final class AppDIContainer: ViewControllerFactory {
         return viewController
     }
     
-    func makeSignUpViewController(onSignUpSuccess: @escaping () -> Void) -> UIViewController {
+    func makeSignUpViewController(
+        onSignUpSuccess: @escaping () -> Void,
+        onReturn: @escaping () -> Void) -> UIViewController {
         let presenter = SignUpPresenter(
             onSignUpSuccess: onSignUpSuccess,
+            onReturn: onReturn,
             validator: LoginValidator(),
             authRepository: FirebaseAuthRepository())
         

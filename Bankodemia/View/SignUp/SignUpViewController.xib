@@ -90,7 +90,7 @@
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="filled" title="Registrarse"/>
                     <connections>
-                        <action selector="requestSignUptrmps:" destination="-1" eventType="touchUpInside" id="19M-kv-Tpc"/>
+                        <action selector="requestSignUp:" destination="-1" eventType="touchUpInside" id="19M-kv-Tpc"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="returnBtn">
@@ -101,7 +101,7 @@
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain" title="Regresar"/>
                     <connections>
-                        <action selector="returnToWelcometrmps:" destination="-1" eventType="touchUpInside" id="ret-act-id"/>
+                        <action selector="returnToWelcome:" destination="-1" eventType="touchUpInside" id="ret-act-id"/>
                     </connections>
                 </button>
             </subviews>
