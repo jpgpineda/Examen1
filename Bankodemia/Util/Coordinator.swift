@@ -31,7 +31,7 @@ final class AppCoordinator {
     
     private func showLogin() {
         let viewController = factory.makeLoginViewController { [weak self] in
-            
+            self?.navigationController.popToRootViewController(animated: true)
         }
         navigationController.pushViewController(viewController, animated: true)
     }
@@ -39,7 +39,7 @@ final class AppCoordinator {
     private func showSignUp() {
         let viewController = factory.makeSignUpViewController(
             onSignUpSuccess: { [weak self] in
-                
+                self?.navigationController.popToRootViewController(animated: true)
             },
             onBack: { [weak self] in
                 self?.navigationController.popViewController(animated: true)
